@@ -1,0 +1,15 @@
+# Compiler output
+out/
+cache/
+
+# Environment
+.env
+
+# Dependencies
+lib/
+
+# Coverage
+lcov.info
+
+# OS
+.DS_Store
