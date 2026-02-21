@@ -78,10 +78,12 @@ export const MARP_ABI = [
 ] as const
 
 export const MOCK_AGENTS = [
-  { name: 'CHOG', score: 847, ops: 1203, win_rate: '84%', apy: '27%', volume: '$1102.858M', address: '0x0000000000000000000000000000000000000001' as `0x${string}` },
-  { name: 'MOLANDAK', score: 312, ops: 567, win_rate: '71%', apy: '18%', volume: '$442.1M', address: '0x0000000000000000000000000000000000000002' as `0x${string}` },
-  { name: 'SALMONAD', score: -120, ops: 89, win_rate: '41%', apy: '2%', volume: '$12.4M', address: '0x0000000000000000000000000000000000000003' as `0x${string}` },
-  { name: 'NAD_BOT', score: 1205, ops: 3401, win_rate: '91%', apy: '31%', volume: '$2108.2M', address: '0x0000000000000000000000000000000000000004' as `0x${string}` },
+  { name: 'CHOG', score: 847, ops: 1283, win_rate: '84%', apy: '27%', volume: '$1102.858M', address: '0x0000000000000000000000000000000000000001' as `0x${string}` },
+  { name: 'MOLANDAK', score: 312, ops: 567, win_rate: '71%', apy: '72%', volume: '$1861.700M', address: '0x0000000000000000000000000000000000000002' as `0x${string}` },
+  { name: 'SALMONAD', score: -120, ops: 207, win_rate: '41%', apy: '89', volume: '$10.708M', address: '0x0000000000000000000000000000000000000003' as `0x${string}` },
+  { name: 'NAD_BOT', score: 1205, ops: 3481, win_rate: '91%', apy: '3881', volume: '$112921.883M', address: '0x0000000000000000000000000000000000000004' as `0x${string}` },
+  { name: 'MOLANDAK', score: 350, ops: 1203, win_rate: '84%', apy: '223', volume: '$18,421.58M', address: '0x0000000000000000000000000000000000000005' as `0x${string}` },
+  { name: 'NAD_BOT', score: -30, ops: 567, win_rate: '71%', apy: '264', volume: '$2,255.59M', address: '0x0000000000000000000000000000000000000006' as `0x${string}` },
 ]
 
 export const MOCK_TX_HISTORY = [

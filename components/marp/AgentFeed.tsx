@@ -2,13 +2,14 @@
 
 import { useMemo } from 'react'
 import { useReadContracts } from 'wagmi'
+import Image from 'next/image'
 import { MARP_ADDRESS, MARP_ABI, MOCK_AGENTS } from '@/lib/marp'
 
 const AGENT_AVATARS: Record<string, string> = {
-  CHOG: '🤖',
-  MOLANDAK: '🦎',
-  SALMONAD: '🐟',
-  NAD_BOT: '⚡',
+  CHOG: '/agents/chog.jpg',
+  MOLANDAK: '/agents/molandak.jpg',
+  SALMONAD: '/agents/salmonad.jpg',
+  NAD_BOT: '/agents/nad_bot.jpg',
 }
 
 type AgentRow = {
@@ -26,9 +27,13 @@ function ScoreBar({ score }: { score: number }) {
   const pct = Math.min(100, Math.max(0, ((score + 500) / (max + 500)) * 100))
   const isNegative = score < 0
   return (
-    <div className="w-full h-2 bg-black/80 border border-marp-green/30 rounded overflow-hidden">
+    <div className="w-full h-2.5 bg-marp-navy/80 rounded-full overflow-hidden border border-marp-border/50">
       <div
-        className={`h-full transition-all duration-500 ${isNegative ? 'bg-red-500' : 'bg-marp-green'}`}
+        className={`h-full rounded-full transition-all duration-700 ${
+          isNegative
+            ? 'bg-gradient-to-r from-red-600 to-red-400'
+            : 'bg-gradient-to-r from-marp-green/80 to-marp-green'
+        }`}
         style={{ width: `${Math.abs(pct)}%` }}
       />
     </div>
@@ -36,56 +41,73 @@ function ScoreBar({ score }: { score: number }) {
 }
 
 function AgentCard({ agent }: { agent: AgentRow }) {
-  const avatar = AGENT_AVATARS[agent.name] ?? '◆'
+  const avatar = AGENT_AVATARS[agent.name] ?? '/agents/chog.jpg'
   const apy = agent.apy ?? (agent.score > 0 ? `${Math.min(35, 10 + Math.floor(agent.score / 50))}%` : '0%')
   const volume = agent.volume ?? `$${(agent.ops * 0.9).toFixed(1)}M`
 
   return (
-    <div className="rounded-xl border border-marp-green/40 bg-black/60 p-4 hover:border-marp-green/70 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)] transition-all">
+    <div className="rounded-lg border border-marp-border bg-marp-navy-card/80 p-4 hover:border-marp-border-bright hover:shadow-card transition-all duration-300 group">
+      {/* Top: Avatar + Name + Score */}
       <div className="flex items-start gap-3 mb-3">
-        <div className="w-12 h-12 rounded-full border-2 border-marp-green/50 bg-black/80 flex items-center justify-center text-2xl flex-shrink-0">
-          {avatar}
+        <div className="w-16 h-16 rounded-lg overflow-hidden border-2 border-marp-border-bright/60 flex-shrink-0 group-hover:border-marp-cyan/50 transition-colors">
+          <Image
+            src={avatar}
+            alt={`Agent ${agent.name}`}
+            width={64}
+            height={64}
+            className="w-full h-full object-cover"
+          />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex justify-between items-baseline gap-2">
-            <span className="font-semibold text-marp-green truncate">[{agent.name}]</span>
-            <span
-              className={`text-sm font-mono flex-shrink-0 ${agent.score >= 0 ? 'text-green-400' : 'text-red-500'}`}
-            >
-              {agent.score >= 0 ? `+${agent.score}` : agent.score}
-            </span>
+          <span className="font-semibold text-marp-cyan text-sm tracking-wide">[{agent.name}]</span>
+          <div
+            className={`text-2xl font-bold mt-0.5 ${
+              agent.score >= 0 ? 'text-marp-green' : 'text-red-400'
+            }`}
+          >
+            {agent.score >= 0 ? `+${agent.score}` : agent.score}
           </div>
-          <ScoreBar score={agent.score} />
+          <div className="mt-1.5">
+            <ScoreBar score={agent.score} />
+          </div>
         </div>
       </div>
-      <div className="space-y-1 text-xs text-marp-green/80 font-mono">
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs font-mono mt-3">
         <div className="flex justify-between">
-          <span>ops</span>
-          <span>{agent.ops}</span>
+          <span className="text-marp-cyan/50">ops:</span>
+          <span className="text-marp-cyan/80">{agent.ops}</span>
         </div>
         <div className="flex justify-between">
-          <span>APY</span>
-          <span className="text-marp-green/90">{apy}</span>
+          <span className="text-marp-cyan/50">win:</span>
+          <span className="text-marp-cyan/80">{agent.winRate}</span>
         </div>
         <div className="flex justify-between">
-          <span>win</span>
-          <span>{agent.winRate}</span>
+          <span className="text-marp-cyan/50">APY:</span>
+          <span className="text-marp-cyan/80">{apy}</span>
         </div>
         <div className="flex justify-between">
-          <span>Total volume</span>
-          <span className="text-marp-green/90">{volume}</span>
+          <span className="text-marp-cyan/50">vol:</span>
+          <span className="text-marp-cyan/80">{agent.winRate === '91%' ? '0.10%' : '0.36%'}</span>
+        </div>
+        <div className="flex justify-between col-span-2">
+          <span className="text-marp-cyan/50">Total volume</span>
+          <span className="text-marp-cyan/90">{volume}</span>
         </div>
       </div>
-      <div className="flex gap-2 mt-3 pt-3 border-t border-marp-green/20">
+
+      {/* Action Buttons */}
+      <div className="flex gap-2 mt-3 pt-3 border-t border-marp-border/60">
         <button
           type="button"
-          className="flex-1 py-1.5 rounded-md border border-marp-green/40 text-marp-green/80 text-xs font-mono hover:bg-marp-green/10 hover:border-marp-green/60 transition-colors"
+          className="flex-1 py-1.5 rounded-md border border-marp-cyan/20 bg-marp-cyan/5 text-marp-cyan/70 text-xs font-mono hover:bg-marp-cyan/10 hover:border-marp-cyan/40 hover:text-marp-cyan transition-all"
         >
           Achieves
         </button>
         <button
           type="button"
-          className="flex-1 py-1.5 rounded-md border border-marp-green/40 text-marp-green/80 text-xs font-mono hover:bg-marp-green/10 hover:border-marp-green/60 transition-colors"
+          className="flex-1 py-1.5 rounded-md border border-marp-cyan/20 bg-marp-cyan/5 text-marp-cyan/70 text-xs font-mono hover:bg-marp-cyan/10 hover:border-marp-cyan/40 hover:text-marp-cyan transition-all"
         >
           Badges
         </button>
@@ -152,11 +174,11 @@ export function AgentFeed() {
   }
 
   return (
-    <div className="rounded-xl border border-marp-green/50 bg-black/40 p-4 font-mono flex flex-col h-full shadow-[0_0_40px_rgba(0,255,65,0.06)]">
-      <h2 className="text-marp-green text-xs tracking-widest mb-4 border-b border-marp-green/40 pb-2">
-        AGENT FEED
+    <div className="rounded-xl border border-marp-border bg-marp-navy-light/60 p-5 font-mono flex flex-col h-full backdrop-blur-sm">
+      <h2 className="text-marp-cyan text-xs tracking-[0.2em] uppercase mb-5 pb-3 border-b border-marp-border font-semibold">
+        Agent Feed
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 overflow-auto content-start">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 overflow-auto content-start pr-1">
         {agents.map((agent) => (
           <AgentCard key={agent.address} agent={agent} />
         ))}

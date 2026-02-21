@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseEther } from 'viem'
-import { MARP_ADDRESS, MARP_ABI, MOCK_AGENTS, MOCK_TX_HISTORY } from '@/lib/marp'
+import { MARP_ADDRESS, MARP_ABI, MOCK_AGENTS } from '@/lib/marp'
 
 type Tab = 'report' | 'stake' | 'history'
 
@@ -70,46 +70,46 @@ export function ReportPanel() {
   ]
 
   return (
-    <div className="rounded-xl border border-marp-green/50 bg-black/40 p-4 font-mono flex flex-col h-full shadow-[0_0_40px_rgba(0,255,65,0.06)]">
-      <h2 className="text-marp-green text-xs tracking-widest mb-4 border-b border-marp-green/40 pb-2">
-        TRADE / REPORT
+    <div className="rounded-xl border border-marp-border bg-marp-navy-light/60 p-5 font-mono flex flex-col h-full backdrop-blur-sm">
+      <h2 className="text-marp-cyan text-xs tracking-[0.2em] uppercase mb-4 pb-3 border-b border-marp-border font-semibold">
+        Trade / Report
       </h2>
 
-      {/* Register — compact */}
+      {/* Register */}
       {hasContract && authenticated && (
-        <div className="flex gap-2 mb-4 pb-3 border-b border-marp-green/30">
+        <div className="flex gap-2 mb-4 pb-3 border-b border-marp-border/60">
           <input
             type="text"
             value={registerName}
             onChange={(e) => setRegisterName(e.target.value)}
             placeholder="Register as agent..."
-            className="flex-1 bg-black/80 border border-marp-green/40 rounded-lg px-3 py-2 text-marp-green text-sm focus:border-marp-green focus:ring-1 focus:ring-marp-green/30 outline-none placeholder:text-marp-green/40"
+            className="flex-1 bg-marp-navy-card border border-marp-border rounded-lg px-3 py-2.5 text-marp-cyan text-sm focus:border-marp-cyan/60 focus:ring-1 focus:ring-marp-cyan/20 outline-none placeholder:text-marp-cyan/30 transition-colors"
           />
           <button
             onClick={handleRegister}
             disabled={registerPending || registerConfirming}
-            className="border border-marp-green/50 hover:border-marp-green px-3 py-2 text-marp-green text-xs rounded-lg hover:bg-marp-green/10 disabled:opacity-50 transition-colors"
+            className="border border-marp-border hover:border-marp-cyan/50 px-4 py-2.5 text-marp-cyan text-xs rounded-lg hover:bg-marp-cyan/5 disabled:opacity-40 transition-all"
           >
             {registerPending || registerConfirming ? '...' : 'REGISTER'}
           </button>
           {registerSuccess && registerHash && (
-            <a href={`https://monad-testnet.socialscan.io/tx/${registerHash}`} target="_blank" rel="noopener noreferrer" className="text-xs text-marp-green/70 hover:text-marp-green self-center">Tx →</a>
+            <a href={`https://monad-testnet.socialscan.io/tx/${registerHash}`} target="_blank" rel="noopener noreferrer" className="text-xs text-marp-cyan/60 hover:text-marp-cyan self-center transition-colors">Tx &rarr;</a>
           )}
         </div>
       )}
-      {registerError && <p className="text-red-500 text-xs mb-2">{registerError.message.slice(0, 50)}</p>}
+      {registerError && <p className="text-red-400 text-xs mb-2">{registerError.message.slice(0, 50)}</p>}
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-4">
+      <div className="flex gap-1 mb-5">
         {tabs.map(({ id, label }) => (
           <button
             key={id}
             type="button"
             onClick={() => setActiveTab(id)}
-            className={`px-3 py-2 rounded-lg text-xs font-mono transition-all ${
+            className={`px-3 py-2.5 rounded-lg text-[10px] tracking-wider font-semibold transition-all ${
               activeTab === id
-                ? 'bg-marp-green/20 border border-marp-green text-marp-green shadow-[0_0_12px_rgba(0,255,65,0.2)]'
-                : 'border border-marp-green/30 text-marp-green/70 hover:border-marp-green/50 hover:text-marp-green/90'
+                ? 'bg-marp-cyan/10 border border-marp-cyan/50 text-marp-cyan shadow-glow-cyan'
+                : 'border border-marp-border text-marp-cyan/40 hover:border-marp-border-bright hover:text-marp-cyan/70'
             }`}
           >
             {label}
@@ -119,23 +119,28 @@ export function ReportPanel() {
 
       {/* Tab: REPORT OUTCOME */}
       {activeTab === 'report' && (
-        <div className="space-y-4 flex-1 overflow-auto">
+        <div className="space-y-5 flex-1 overflow-auto pr-1">
+          {/* Agent address */}
           <div>
-            <label className="block text-xs text-marp-green/80 mb-1">Agent (address)</label>
+            <label className="block text-[10px] tracking-wider text-marp-cyan/60 mb-2 uppercase font-semibold">Agent (address)</label>
             <input
               type="text"
               value={agentAddress}
               onChange={(e) => setAgentAddress(e.target.value)}
-              placeholder="0x..."
-              className="w-full bg-black/80 border border-marp-green/40 rounded-lg px-3 py-2 text-marp-green text-sm font-mono focus:border-marp-green focus:ring-1 focus:ring-marp-green/30 outline-none placeholder:text-marp-green/40"
+              placeholder="0x"
+              className="w-full bg-marp-navy-card border border-marp-border rounded-lg px-3 py-2.5 text-marp-cyan text-sm font-mono focus:border-marp-cyan/50 focus:ring-1 focus:ring-marp-cyan/20 outline-none placeholder:text-marp-cyan/25 transition-colors"
             />
-            <div className="flex gap-2 flex-wrap mt-2">
+            <div className="flex gap-2 flex-wrap mt-2.5">
               {agentSuggestions.map((a) => (
                 <button
                   key={a.name}
                   type="button"
                   onClick={() => setAgentAddress(a.address)}
-                  className="border border-marp-green/40 hover:border-marp-green hover:bg-marp-green/10 px-2 py-1.5 rounded-md text-xs text-marp-green/80 hover:text-marp-green transition-colors"
+                  className={`px-2.5 py-1.5 rounded-md text-[10px] font-semibold tracking-wider transition-all ${
+                    agentAddress === a.address
+                      ? 'border border-marp-cyan/50 bg-marp-cyan/10 text-marp-cyan'
+                      : 'border border-marp-border text-marp-cyan/50 hover:border-marp-border-bright hover:text-marp-cyan/80'
+                  }`}
                 >
                   {a.name}
                 </button>
@@ -143,45 +148,53 @@ export function ReportPanel() {
             </div>
           </div>
 
+          {/* Outcome */}
           <div>
-            <label className="block text-xs text-marp-green/80 mb-2">Outcome</label>
-            <div className="flex gap-2">
+            <label className="block text-[10px] tracking-wider text-marp-cyan/60 mb-2 uppercase font-semibold">Outcome</label>
+            <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setOutcome('success')}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-mono border transition-all ${
+                className={`flex-1 py-3 rounded-lg text-sm font-mono border-2 transition-all flex items-center justify-center gap-2 ${
                   outcome === 'success'
-                    ? 'border-marp-green bg-marp-green/20 text-marp-green shadow-[0_0_12px_rgba(0,255,65,0.15)]'
-                    : 'border-marp-green/40 text-marp-green/70 hover:border-marp-green/60'
+                    ? 'border-marp-green/60 bg-marp-green/10 text-marp-green shadow-glow-green'
+                    : 'border-marp-border text-marp-cyan/40 hover:border-marp-border-bright'
                 }`}
               >
-                ✓ Profit
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="flex-shrink-0">
+                  <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Profit
               </button>
               <button
                 type="button"
                 onClick={() => setOutcome('fail')}
-                className={`flex-1 py-2.5 rounded-lg text-sm font-mono border transition-all ${
+                className={`flex-1 py-3 rounded-lg text-sm font-mono border-2 transition-all flex items-center justify-center gap-2 ${
                   outcome === 'fail'
-                    ? 'border-red-500 bg-red-500/20 text-red-400 shadow-[0_0_12px_rgba(239,68,68,0.15)]'
-                    : 'border-marp-green/40 text-marp-green/70 hover:border-red-500/50'
+                    ? 'border-red-500/60 bg-red-500/10 text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.15)]'
+                    : 'border-marp-border text-marp-cyan/40 hover:border-marp-border-bright'
                 }`}
               >
-                ✗ Loss
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="flex-shrink-0">
+                  <path d="M3 3L11 11M11 3L3 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Loss
               </button>
             </div>
           </div>
 
+          {/* Magnitude */}
           <div>
-            <label className="block text-xs text-marp-green/80 mb-1">
+            <label className="flex items-center gap-1.5 text-[10px] tracking-wider text-marp-cyan/60 mb-2 uppercase font-semibold">
               Magnitude
-              <span className="ml-1.5 text-marp-green/50 cursor-help" title="Weight of the outcome (e.g. 10 = +10 or -10 score)">ⓘ</span>
+              <span className="w-4 h-4 rounded-full border border-marp-cyan/30 flex items-center justify-center text-marp-cyan/40 text-[8px] cursor-help" title="Weight of the outcome (e.g. 10 = +10 or -10 score)">i</span>
             </label>
             <input
               type="number"
               min="1"
               value={magnitude}
               onChange={(e) => setMagnitude(e.target.value)}
-              className="w-full bg-black/80 border border-marp-green/40 rounded-lg px-3 py-2 text-marp-green text-sm font-mono focus:border-marp-green focus:ring-1 focus:ring-marp-green/30 outline-none"
+              className="w-full bg-marp-navy-card border border-marp-border rounded-lg px-3 py-2.5 text-marp-cyan text-sm font-mono focus:border-marp-cyan/50 focus:ring-1 focus:ring-marp-cyan/20 outline-none transition-colors"
             />
           </div>
 
@@ -190,102 +203,113 @@ export function ReportPanel() {
               <button
                 onClick={handleReport}
                 disabled={reportPending || reportConfirming}
-                className="w-full border border-marp-green bg-marp-green/10 text-marp-green py-2.5 rounded-lg font-mono text-sm hover:bg-marp-green/20 hover:shadow-[0_0_16px_rgba(0,255,65,0.12)] disabled:opacity-50 transition-all"
+                className="w-full border-2 border-marp-cyan/40 bg-marp-cyan/5 text-marp-cyan py-3 rounded-lg font-mono text-sm font-semibold tracking-wider hover:bg-marp-cyan/10 hover:border-marp-cyan/60 hover:shadow-glow-cyan disabled:opacity-40 transition-all"
               >
                 {reportPending || reportConfirming ? 'Confirming...' : 'REPORT OUTCOME'}
               </button>
               {reportSuccess && reportHash && (
-                <a href={`https://monad-testnet.socialscan.io/tx/${reportHash}`} target="_blank" rel="noopener noreferrer" className="text-xs text-marp-green/80 hover:text-marp-green block">View tx →</a>
+                <a href={`https://monad-testnet.socialscan.io/tx/${reportHash}`} target="_blank" rel="noopener noreferrer" className="text-xs text-marp-cyan/60 hover:text-marp-cyan block transition-colors">View tx &rarr;</a>
               )}
-              {reportError && <p className="text-red-500 text-xs">{reportError.message.slice(0, 60)}...</p>}
+              {reportError && <p className="text-red-400 text-xs">{reportError.message.slice(0, 60)}...</p>}
             </>
           ) : (
-            <p className="text-marp-green/50 text-xs">Connect wallet + set NEXT_PUBLIC_MARP_ADDRESS to report</p>
+            <p className="text-marp-cyan/30 text-xs">Connect wallet + set NEXT_PUBLIC_MARP_ADDRESS to report</p>
           )}
         </div>
       )}
 
       {/* Tab: STAKE */}
       {activeTab === 'stake' && (
-        <div className="space-y-4 flex-1 overflow-auto">
+        <div className="space-y-5 flex-1 overflow-auto pr-1">
+          {/* Stake on agent */}
           <div>
-            <label className="block text-xs text-marp-green/80 mb-1">Stake on agent (address)</label>
+            <label className="block text-[10px] tracking-wider text-marp-cyan/60 mb-2 uppercase font-semibold">Stake on agent (address)</label>
             <input
               type="text"
               value={stakeAgent}
               onChange={(e) => setStakeAgent(e.target.value)}
               placeholder="0x..."
-              className="w-full bg-black/80 border border-marp-green/40 rounded-lg px-3 py-2 text-marp-green text-sm font-mono focus:border-marp-green focus:ring-1 focus:ring-marp-green/30 outline-none placeholder:text-marp-green/40"
+              className="w-full bg-marp-navy-card border border-marp-border rounded-lg px-3 py-2.5 text-marp-cyan text-sm font-mono focus:border-marp-cyan/50 focus:ring-1 focus:ring-marp-cyan/20 outline-none placeholder:text-marp-cyan/25 transition-colors"
             />
-            <div className="flex gap-2 flex-wrap mt-2">
+            <div className="flex gap-2 flex-wrap mt-2.5">
               {agentSuggestions.map((a) => (
                 <button
                   key={a.name}
                   type="button"
                   onClick={() => setStakeAgent(a.address)}
-                  className="border border-marp-green/40 hover:border-marp-green hover:bg-marp-green/10 px-2 py-1.5 rounded-md text-xs text-marp-green/80 hover:text-marp-green transition-colors"
+                  className={`px-2.5 py-1.5 rounded-md text-[10px] font-semibold tracking-wider transition-all ${
+                    stakeAgent === a.address
+                      ? 'border border-marp-cyan/50 bg-marp-cyan/10 text-marp-cyan'
+                      : 'border border-marp-border text-marp-cyan/50 hover:border-marp-border-bright hover:text-marp-cyan/80'
+                  }`}
                 >
                   {a.name}
                 </button>
               ))}
             </div>
           </div>
+
+          {/* Amount */}
           <div>
-            <label className="block text-xs text-marp-green/80 mb-1">Amount (MON)</label>
+            <label className="block text-[10px] tracking-wider text-marp-cyan/60 mb-2 uppercase font-semibold">Amount (MON)</label>
             <input
               type="text"
               value={stakeAmount}
               onChange={(e) => setStakeAmount(e.target.value)}
               placeholder="0.01"
-              className="w-full bg-black/80 border border-marp-green/40 rounded-lg px-3 py-2 text-marp-green text-sm font-mono focus:border-marp-green focus:ring-1 focus:ring-marp-green/30 outline-none placeholder:text-marp-green/40"
+              className="w-full bg-marp-navy-card border border-marp-border rounded-lg px-3 py-2.5 text-marp-cyan text-sm font-mono focus:border-marp-cyan/50 focus:ring-1 focus:ring-marp-cyan/20 outline-none placeholder:text-marp-cyan/25 transition-colors"
             />
           </div>
+
+          {/* Outcome for stake */}
+          <div>
+            <label className="block text-[10px] tracking-wider text-marp-cyan/60 mb-2 uppercase font-semibold">Prediction</label>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                className="flex-1 py-3 rounded-lg text-sm font-mono border-2 border-marp-green/60 bg-marp-green/10 text-marp-green shadow-glow-green transition-all flex items-center justify-center gap-2"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="flex-shrink-0">
+                  <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Profit
+              </button>
+              <button
+                type="button"
+                className="flex-1 py-3 rounded-lg text-sm font-mono border-2 border-marp-border text-marp-cyan/40 hover:border-marp-border-bright transition-all flex items-center justify-center gap-2"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="flex-shrink-0">
+                  <path d="M3 3L11 11M11 3L3 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                Loss
+              </button>
+            </div>
+          </div>
+
           {hasContract && authenticated ? (
             <>
               <button
                 onClick={handleStake}
                 disabled={stakePending || stakeConfirming}
-                className="w-full border border-marp-green bg-marp-green/10 text-marp-green py-2.5 rounded-lg font-mono text-sm hover:bg-marp-green/20 hover:shadow-[0_0_16px_rgba(0,255,65,0.12)] disabled:opacity-50 transition-all"
+                className="w-full border-2 border-marp-cyan/40 bg-marp-cyan/5 text-marp-cyan py-3 rounded-lg font-mono text-sm font-semibold tracking-wider hover:bg-marp-cyan/10 hover:border-marp-cyan/60 hover:shadow-glow-cyan disabled:opacity-40 transition-all"
               >
                 {stakePending || stakeConfirming ? 'Confirming...' : 'STAKE ON AGENT'}
               </button>
               {stakeSuccess && stakeHash && (
-                <a href={`https://monad-testnet.socialscan.io/tx/${stakeHash}`} target="_blank" rel="noopener noreferrer" className="text-xs text-marp-green/80 hover:text-marp-green block">View tx →</a>
+                <a href={`https://monad-testnet.socialscan.io/tx/${stakeHash}`} target="_blank" rel="noopener noreferrer" className="text-xs text-marp-cyan/60 hover:text-marp-cyan block transition-colors">View tx &rarr;</a>
               )}
-              {stakeError && <p className="text-red-500 text-xs">{stakeError.message.slice(0, 60)}...</p>}
+              {stakeError && <p className="text-red-400 text-xs">{stakeError.message.slice(0, 60)}...</p>}
             </>
           ) : (
-            <p className="text-marp-green/50 text-xs">Connect wallet + set NEXT_PUBLIC_MARP_ADDRESS to stake</p>
+            <p className="text-marp-cyan/30 text-xs">Connect wallet + set NEXT_PUBLIC_MARP_ADDRESS to stake</p>
           )}
         </div>
       )}
 
       {/* Tab: TRANSACTION HISTORY */}
       {activeTab === 'history' && (
-        <div className="flex-1 overflow-auto">
-          <div className="flex items-center gap-2 mb-3">
-            <select className="bg-black/80 border border-marp-green/40 rounded-lg px-3 py-2 text-marp-green text-xs font-mono focus:border-marp-green outline-none">
-              <option>All</option>
-            </select>
-          </div>
-          <ul className="space-y-2">
-            {MOCK_TX_HISTORY.map((tx, i) => (
-              <li
-                key={i}
-                className="flex items-center gap-3 py-2 px-3 rounded-lg border border-marp-green/20 bg-black/40 hover:border-marp-green/40 transition-colors"
-              >
-                <div className="w-8 h-8 rounded-full border border-marp-green/40 bg-black/80 flex items-center justify-center text-sm">
-                  🤖
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-marp-green text-xs font-mono">Agent {tx.agent}</div>
-                  <div className="text-marp-green/60 text-xs truncate">{tx.action}</div>
-                </div>
-                <div className="text-marp-green/50 text-xs font-mono truncate max-w-[80px]">{tx.address}</div>
-                <div className="text-marp-green/50 text-xs flex-shrink-0">{tx.time}</div>
-              </li>
-            ))}
-          </ul>
+        <div className="flex-1 overflow-auto pr-1">
+          <p className="text-marp-cyan/40 text-xs">Transaction history is shown in the Live Transaction Log panel.</p>
         </div>
       )}
     </div>
