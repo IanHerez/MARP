@@ -41,7 +41,7 @@ function AgentCard({ agent }: { agent: AgentRow }) {
   const volume = agent.volume ?? `$${(agent.ops * 0.9).toFixed(1)}M`
 
   return (
-    <div className="rounded-xl border border-marp-green/40 bg-black/60 p-4 hover:border-marp-green/70 hover:shadow-[0_0_20px_rgba(0,255,65,0.08)] transition-all">
+    <div className="rounded-xl border border-marp-green/40 bg-black/60 p-4 hover:border-marp-green/70 hover:shadow-[0_0_20px_rgba(131,110,249,0.08)] transition-all">
       <div className="flex items-start gap-3 mb-3">
         <div className="w-12 h-12 rounded-full border-2 border-marp-green/50 bg-black/80 flex items-center justify-center text-2xl flex-shrink-0">
           {avatar}
@@ -146,13 +146,13 @@ export function AgentFeed() {
           winRate,
           apy: sc > 0 ? `${Math.min(35, 10 + Math.floor(sc / 50))}%` : '0%',
           volume: `$${(ops * 0.9).toFixed(1)}M`,
-        }
+        } as AgentRow
       })
       .filter((x): x is AgentRow => x !== null)
   }
 
   return (
-    <div className="rounded-xl border border-marp-green/50 bg-black/40 p-4 font-mono flex flex-col h-full shadow-[0_0_40px_rgba(0,255,65,0.06)]">
+    <div className="rounded-xl border border-marp-green/50 bg-black/40 p-4 font-mono flex flex-col h-full shadow-[0_0_40px_rgba(131,110,249,0.06)]">
       <h2 className="text-marp-green text-xs tracking-widest mb-4 border-b border-marp-green/40 pb-2">
         AGENT FEED
       </h2>

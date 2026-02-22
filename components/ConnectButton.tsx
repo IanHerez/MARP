@@ -47,7 +47,7 @@ export function ConnectButton() {
       </div>
       <button
         onClick={logout}
-        className="bg-black border border-marp-green/50 hover:border-marp-green text-marp-green px-3 py-1.5 rounded-lg text-sm font-mono transition-all hover:shadow-[0_0_12px_rgba(0,255,65,0.15)]"
+        className="bg-black border border-marp-green/50 hover:border-marp-green text-marp-green px-3 py-1.5 rounded-lg text-sm font-mono transition-all hover:shadow-[0_0_12px_rgba(131,110,249,0.15)]"
       >
         Exit
       </button>

@@ -70,7 +70,7 @@ export function ReportPanel() {
   ]
 
   return (
-    <div className="rounded-xl border border-marp-green/50 bg-black/40 p-4 font-mono flex flex-col h-full shadow-[0_0_40px_rgba(0,255,65,0.06)]">
+    <div className="rounded-xl border border-marp-green/50 bg-black/40 p-4 font-mono flex flex-col h-full shadow-[0_0_40px_rgba(131,110,249,0.06)]">
       <h2 className="text-marp-green text-xs tracking-widest mb-4 border-b border-marp-green/40 pb-2">
         TRADE / REPORT
       </h2>
@@ -108,7 +108,7 @@ export function ReportPanel() {
             onClick={() => setActiveTab(id)}
             className={`px-3 py-2 rounded-lg text-xs font-mono transition-all ${
               activeTab === id
-                ? 'bg-marp-green/20 border border-marp-green text-marp-green shadow-[0_0_12px_rgba(0,255,65,0.2)]'
+                ? 'bg-marp-green/20 border border-marp-green text-marp-green shadow-[0_0_12px_rgba(131,110,249,0.2)]'
                 : 'border border-marp-green/30 text-marp-green/70 hover:border-marp-green/50 hover:text-marp-green/90'
             }`}
           >
@@ -151,7 +151,7 @@ export function ReportPanel() {
                 onClick={() => setOutcome('success')}
                 className={`flex-1 py-2.5 rounded-lg text-sm font-mono border transition-all ${
                   outcome === 'success'
-                    ? 'border-marp-green bg-marp-green/20 text-marp-green shadow-[0_0_12px_rgba(0,255,65,0.15)]'
+                    ? 'border-marp-green bg-marp-green/20 text-marp-green shadow-[0_0_12px_rgba(131,110,249,0.15)]'
                     : 'border-marp-green/40 text-marp-green/70 hover:border-marp-green/60'
                 }`}
               >
@@ -190,7 +190,7 @@ export function ReportPanel() {
               <button
                 onClick={handleReport}
                 disabled={reportPending || reportConfirming}
-                className="w-full border border-marp-green bg-marp-green/10 text-marp-green py-2.5 rounded-lg font-mono text-sm hover:bg-marp-green/20 hover:shadow-[0_0_16px_rgba(0,255,65,0.12)] disabled:opacity-50 transition-all"
+                className="w-full border border-marp-green bg-marp-green/10 text-marp-green py-2.5 rounded-lg font-mono text-sm hover:bg-marp-green/20 hover:shadow-[0_0_16px_rgba(131,110,249,0.12)] disabled:opacity-50 transition-all"
               >
                 {reportPending || reportConfirming ? 'Confirming...' : 'REPORT OUTCOME'}
               </button>
@@ -245,7 +245,7 @@ export function ReportPanel() {
               <button
                 onClick={handleStake}
                 disabled={stakePending || stakeConfirming}
-                className="w-full border border-marp-green bg-marp-green/10 text-marp-green py-2.5 rounded-lg font-mono text-sm hover:bg-marp-green/20 hover:shadow-[0_0_16px_rgba(0,255,65,0.12)] disabled:opacity-50 transition-all"
+                className="w-full border border-marp-green bg-marp-green/10 text-marp-green py-2.5 rounded-lg font-mono text-sm hover:bg-marp-green/20 hover:shadow-[0_0_16px_rgba(131,110,249,0.12)] disabled:opacity-50 transition-all"
               >
                 {stakePending || stakeConfirming ? 'Confirming...' : 'STAKE ON AGENT'}
               </button>

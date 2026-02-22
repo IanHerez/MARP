@@ -46,7 +46,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       config={{
         appearance: {
           theme: 'dark',
-          accentColor: '#00ff41',
+          accentColor: '#836EF9',
           logo: 'https://monad.xyz/monad-logo.svg',
         },
         loginMethods: ['email', 'google', 'wallet'],
